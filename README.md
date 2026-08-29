@@ -30,7 +30,7 @@ Within the GitHub Actions workflow which deploys your plugin to the plugin direc
 2. Add the following step to your workflow so it runs after your plugin has been deployed:
 
    ```yaml
-   - uses: johnbillion/action-wordpress-plugin-attestation@0.7.1
+   - uses: johnbillion/action-wordpress-plugin-attestation@0.7.3
      with:
        zip-path: my-plugin-slug.zip
    ```
@@ -52,12 +52,12 @@ jobs:
         uses: 10up/action-wordpress-plugin-deploy@v2
         id: deploy
         env:
-          SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
+          SVN_USERNAME: my-wporg-username
           SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
         with:
           generate-zip: true
       - name: Generate build provenance attestation
-        uses: johnbillion/action-wordpress-plugin-attestation@0.7.1
+        uses: johnbillion/action-wordpress-plugin-attestation@0.7.3
         with:
           zip-path: ${{ steps.deploy.outputs.zip-path }}
 ```
@@ -67,7 +67,7 @@ jobs:
 Here is the full list of required and optional inputs:
 
 ```yaml
-- uses: johnbillion/action-wordpress-plugin-attestation@0.7.1
+- uses: johnbillion/action-wordpress-plugin-attestation@0.7.3
   with:
     # Required. Path to the zip file generated for the plugin release.
     # Use `${{ steps.deploy.outputs.zip-path }}` if you're using the
@@ -105,9 +105,9 @@ Here is the full list of required and optional inputs:
 | `zip-url`         | URL where the plugin zip file is hosted                        | `https://downloads.wordpress.org/plugin/foo.1.2.3.zip` |
 | `zip-sha-256`     | SHA-256 hash of the downloaded plugin zip file                 | `a1b2c3d4e5f6...`                                      |
 
-## Can't I just use `actions/attest-build-provenance`?
+## Can't I just use `actions/attest` or `actions/attest-build-provenance`?
 
-This action is a wrapper for the `actions/attest-build-provenance` action provided by GitHub. It specifically handles generating an attestation for the zip file of your plugin once it's been deployed to the plugin directory. This facilitates consumers being able to verify the provenance of the zip file that they download from wordpress.org, not just for an artifact on GitHub.
+This action is a wrapper for the `actions/attest` action provided by GitHub that specifically handles generating an attestation for the zip file of your plugin once it's been deployed to the plugin directory. This facilitates consumers being able to verify the provenance of the zip file that they download from wordpress.org, not just for an artifact on GitHub.
 
 ## Does this work if my plugin has a build step?
 
@@ -115,7 +115,7 @@ Yes, this action supports plugins that have a build step because it is only conc
 
 ## Does this work if release confirmation is enabled?
 
-Yes, this action specifically supports [plugin release confirmation on wordpress.org](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/). It will periodically attempt to fetch the plugin zip from the plugin directory for up to 60 minutes, which allows you plenty of time to confirm the release.
+Yes, this action specifically supports [plugin release confirmation on wordpress.org](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/). Once triggered, it will attempt to fetch the plugin zip from the plugin directory for up to 60 minutes, which allows you plenty of time to confirm the release.
 
 ## Does this work for hosts other than wordpress.org?
 
@@ -196,7 +196,7 @@ Optionally use the `dry-run` parameter to perform all the verification steps wit
             generate-zip: true
             dry-run: true
         - name: Generate build provenance attestation
-          uses: johnbillion/action-wordpress-plugin-attestation@0.7.1
+          uses: johnbillion/action-wordpress-plugin-attestation@0.7.3
           with:
             zip-path: ${{ steps.deploy.outputs.zip-path }}
             dry-run: true # Remove this to publish the attestation
@@ -241,7 +241,11 @@ Yes, but be aware that when a consumer uses `gh attestation verify` to verify an
 
 <p align="center"><a href="https://automattic.com"><img src="https://cdn.jsdelivr.net/gh/johnbillion/johnbillion@latest/assets/sponsors/automattic.svg" alt="Automattic" width="50%"></a></p>
 
-<p align="center"><a href="https://servmask.com"><img src="https://cdn.jsdelivr.net/gh/johnbillion/johnbillion@latest/assets/sponsors/servmask.svg" alt="ServMask" width="25%"></a></p>
+<p align="center">
+    <a href="https://servmask.com"><img src="https://cdn.jsdelivr.net/gh/johnbillion/johnbillion@latest/assets/sponsors/servmask.svg" alt="ServMask" width="25%"></a>
+    &nbsp; &nbsp; &nbsp;
+    <a href="https://wp-staging.com"><img src="https://cdn.jsdelivr.net/gh/johnbillion/johnbillion@latest/assets/sponsors/wp-staging.png" alt="WP Staging" width="25%"></a>
+</p>
 
 <p align="center">Plus all my kind sponsors on GitHub:</p>
 
